@@ -8,7 +8,9 @@ enable :sessions
 #  'Hello World! Currently running version ' + Twilio::VERSION + ' of the twilio-ruby library.'
 #end
 
+
 get '/sms-quickstart' do
+  session["counter"] = 0
   session["counter"] ||= 0
   sms_count = session["counter"]
   if sms_count == 0
