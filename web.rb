@@ -25,6 +25,7 @@ get '/sms-quickstart' do
     else
       message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected a whole number. Please answer the following question by providing your answer in whole numbers./n How many total hours of sleep did you get last night?"
       session["counter"] -= 1 
+    end
 
   elsif sms_count == SECOND_RESPONSE
     if response.is_a? String
@@ -37,6 +38,7 @@ get '/sms-quickstart' do
       else
         message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected Yes or No. Please state Yes or No."
         session["counter"] -= 1
+      end
 
   else
     message = "You have completed this task. I'll let you know when you have another!"
