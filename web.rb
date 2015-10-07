@@ -11,7 +11,7 @@ enable :sessions
 
 get '/sms-quickstart' do
   response = params[:Body]
-  session["counter"] = 0
+  #session["counter"] = 0
   session["counter"] ||= 0
   sms_count = session["counter"]
   START = 0
