@@ -8,6 +8,10 @@ enable :sessions
 #  'Hello World! Currently running version ' + Twilio::VERSION + ' of the twilio-ruby library.'
 #end
 
+def is_number? string
+  true if Float(string) rescue false
+end
+
 
 get '/sms-quickstart' do
   response = params[:Body]
@@ -18,12 +22,12 @@ get '/sms-quickstart' do
   FIRST_RESPONSE = 1
   SECOND_RESPONSE = 2
   if sms_count == START
-    message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question by providing your answer in whole numbers./n How many total hours of sleep did you get last night?"
+    message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question./n How many total hours of sleep did you get last night? (e.g. 8)"
   elsif sms_count == FIRST_RESPONSE
-    if response.is_a? Integer
+    if is_number? response
       message = "I received your response as\n" + response + "\n Please confirm if this is correct by answering Yes or No."
     else
-      message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected a whole number. Please answer the following question by providing your answer in whole numbers./n How many total hours of sleep did you get last night?"
+      message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected a whole number. Please answer the following question.\n How many total hours of sleep did you get last night? (e.g. 8)"
       session["counter"] -= 1 
     end
 
@@ -33,7 +37,7 @@ get '/sms-quickstart' do
       if response == 'yes'
         message = "Your response has been recorded. Thanks!"
       elsif response == 'no'
-        message = "Please resend your response to the following question by providing your answer in whole numbers./n How many total hours of sleep did you get last night?"
+        message = "Please resend your response to the following question.\n How many total hours of sleep did you get last night? (e.g. 8)"
         session["counter"] -= 2
       else
         message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected Yes or No. Please state Yes or No."
