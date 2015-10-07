@@ -10,13 +10,36 @@ enable :sessions
 
 
 get '/sms-quickstart' do
+  response = params[:Body]
   session["counter"] = 0
   session["counter"] ||= 0
   sms_count = session["counter"]
-  if sms_count == 0
-    message = "Hello, thanks for the new message."
+  START = 0
+  FIRST_RESPONSE = 1
+  SECOND_RESPONSE = 2
+  if sms_count == START
+    message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question by providing your answer in whole numbers./n How many total hours of sleep did you get last night?"
+  elsif sms_count == FIRST_RESPONSE
+    if response.is_a? Integer
+      message = "I received your response as\n" + response + "\n Please confirm if this is correct by answering Yes or No."
+    else
+      message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected a whole number. Please answer the following question by providing your answer in whole numbers./n How many total hours of sleep did you get last night?"
+      session["counter"] -= 1 
+
+  elsif sms_count == SECOND_RESPONSE
+    if response.is_a? String
+      response = response.downcase
+      if response == 'yes'
+        message = "Your response has been recorded. Thanks!"
+      elsif response == 'no'
+        message = "Please resend your response to the following question by providing your answer in whole numbers./n How many total hours of sleep did you get last night?"
+        session["counter"] -= 2
+      else
+        message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected Yes or No. Please state Yes or No."
+        session["counter"] -= 1
+
   else
-    message = "Hello, thanks for message number #{sms_count + 1}"
+    message = "You have completed this task. I'll let you know when you have another!"
   end
   twiml = Twilio::TwiML::Response.new do |r|
     r.Message message
