@@ -39,6 +39,10 @@ get '/sms-quickstart' do
         message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected Yes or No. Please state Yes or No."
         session["counter"] -= 1
       end
+    else
+      message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected Yes or No. Please state Yes or No."
+        session["counter"] -= 1
+    end
 
   else
     message = "You have completed this task. I'll let you know when you have another!"
