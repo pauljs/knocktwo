@@ -31,7 +31,7 @@ get '/sms-quickstart' do
     if all_digits? response
       message = "I received your response as\n" + response + "\n Please confirm if this is correct by answering Yes or No."
     else
-      message = "Sorry, your response was not in the correct format. I received:\n" + response + "\n but expected a whole number. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
+      message = "Sorry, your response was not in the correct format. I received:\n" + response + "\nbut expected a whole number. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
       session["counter"] -= 1 
     end
 
