@@ -13,7 +13,7 @@ def all_letters? str
 end
 
 def all_digits? str
-  str[/0-9]+/] == str
+  str[/[0-9]+/] == str
 end
 
 
