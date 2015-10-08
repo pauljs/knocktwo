@@ -8,8 +8,12 @@ enable :sessions
 #  'Hello World! Currently running version ' + Twilio::VERSION + ' of the twilio-ruby library.'
 #end
 
-def is_number? string
-  true if Float(string) rescue false
+def all_letters(str)
+  str[/[a-zA-z]+/] == str
+end
+
+def all_digits? str
+  str[/0-9]+/] == str
 end
 
 
@@ -22,12 +26,12 @@ get '/sms-quickstart' do
   FIRST_RESPONSE = 1
   SECOND_RESPONSE = 2
   if sms_count == START
-    message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question./n How many total hours of sleep did you get last night? (e.g. 8)"
+    message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question in whole numbers.\n How many total hours of sleep did you get last night? (e.g. 8)"
   elsif sms_count == FIRST_RESPONSE
-    if is_number? response
+    if all_digits? response
       message = "I received your response as\n" + response + "\n Please confirm if this is correct by answering Yes or No."
     else
-      message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected a whole number. Please answer the following question.\n How many total hours of sleep did you get last night? (e.g. 8)"
+      message = "Sorry, your response was not in the correct format. I received:\n" + response + "\n but expected a whole number. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
       session["counter"] -= 1 
     end
 
@@ -37,18 +41,18 @@ get '/sms-quickstart' do
       if response == 'yes'
         message = "Your response has been recorded. Thanks!"
       elsif response == 'no'
-        message = "Please resend your response to the following question.\n How many total hours of sleep did you get last night? (e.g. 8)"
+        message = "Please resend your response to the following question in whole numbers.\n How many total hours of sleep did you get last night? (e.g. 8)"
         session["counter"] -= 2
       else
-        message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected Yes or No. Please state Yes or No."
+        message = "Sorry, your response was not in the correct format. I received:\n" + response + "\n but expected Yes or No. Please state Yes or No."
         session["counter"] -= 1
       end
     else
-      message = "Sorry, your response was not in the correct format. I received:/n" + response + "/n but expected Yes or No. Please state Yes or No."
+      message = "Sorry, your response was not in the correct format. I received:\n" + response + "\n but expected Yes or No. Please state Yes or No."
         session["counter"] -= 1
     end
   elsif response == "edit" || response == "Edit"
-    message = "Please answer the following question./n How many total hours of sleep did you get last night? (e.g. 8)"
+    message = "Please answer the following question in whole numbers.\n How many total hours of sleep did you get last night? (e.g. 8)"
     session["counter"] = 0
   else
     message = "You have completed this task. If you would like to edit your response, respond with Edit; otherwise, I'll let you know when you have another task!"
