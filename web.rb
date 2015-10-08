@@ -39,7 +39,7 @@ get '/sms-quickstart' do
     if all_letters? response
       response = response.downcase
       if response == 'yes'
-        message = "Your response has been recorded. Thanks!"
+        message = "Your response has been recorded. If you would like to edit your response, respond with Edit.  Thanks!"
       elsif response == 'no'
         message = "Please resend your response to the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
         session["counter"] -= 2
@@ -52,7 +52,7 @@ get '/sms-quickstart' do
         session["counter"] -= 1
     end
   elsif sms_count > SECOND_RESPONSE && response.downcase == "edit"
-    message = "Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
+    message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
     session["counter"] = 0
   else
     message = "You have completed this task. If you would like to edit your response, respond with Edit; otherwise, I'll let you know when you have another task!"
