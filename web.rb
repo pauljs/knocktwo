@@ -25,7 +25,8 @@ get '/sms-quickstart' do
   sms_count = session[params[:From]]["counter"]
 
   if response == "get stuff"
-    message = session[params[:From]].to_s
+    #message = session[params[:From]].to_s
+    message = "test"
     twiml = Twilio::TwiML::Response.new do |r|
       r.Message "Info: " + message
     end
@@ -84,6 +85,6 @@ get '/sms-quickstart' do
   twiml = Twilio::TwiML::Response.new do |r|
     r.Message message
   end
-  session["counter"] += 1
+  session[params[:From]]["counter"] += 1
   twiml.text
 end
