@@ -20,7 +20,7 @@ end
 get '/sms-quickstart' do
   response = params[:Body]
   #session["counter"] = -1
-  session[params[:From] ||= Hash.new
+  session[params[:From]] ||= Hash.new
   session[params[:From]]["counter"] ||= 0
   sms_count = session[params[:From]]["counter"]
 
@@ -58,7 +58,7 @@ get '/sms-quickstart' do
         end
         message = "Your response has been recorded." + suggestion + " If you would like to edit your response, respond with Edit. Thanks!"
          dict = session[params[:From]]
-         if dict == nil:
+         if dict == nil
            dict = Hash.new
          end
          cur_time = Time.new
