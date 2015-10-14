@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'twilio-ruby'
 require 'sinatra'
-
+#evaluate by asking reasons for delayed responses
 enable :sessions
 
 #get '/' do
@@ -20,8 +20,19 @@ end
 get '/sms-quickstart' do
   response = params[:Body]
   #session["counter"] = -1
-  session["counter"] ||= 0
-  sms_count = session["counter"]
+  session[params[:From]] ||= Hash.new
+  session[params[:From]]["counter"] ||= 0
+  sms_count = session[params[:From]]["counter"]
+
+  if response == "get stuff"
+    message = session[params[:From]].to_s
+    twiml = Twilio::TwiML::Response.new do |r|
+      r.Message message
+    end
+    twiml.text
+    return
+  end
+
   START = 0
   FIRST_RESPONSE = 1
   SECOND_RESPONSE = 2
@@ -30,6 +41,7 @@ get '/sms-quickstart' do
   elsif sms_count == FIRST_RESPONSE
     if all_digits? response
       message = "I received your response as\n" + response + "\nPlease confirm if this is correct by answering Yes or No."
+      session[params[:From]]["response"] = response
     else
       message = "Sorry, your response was not in the correct format. I received:\n" + response + "\nbut expected a whole number. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
       session["counter"] -= 1 
@@ -39,7 +51,19 @@ get '/sms-quickstart' do
     if all_letters? response
       response = response.downcase
       if response == 'yes'
-        message = "Your response has been recorded. If you would like to edit your response, respond with Edit.  Thanks!"
+        if session["response"].to_i >= 7
+          suggestion = "Glad to see you are sleeping enough!"
+        else
+          suggestion = "You should try to get more sleep."
+        end
+        message = "Your response has been recorded." + suggestion + " If you would like to edit your response, respond with Edit. Thanks!"
+         dict = session[params[:From]]
+         if dict == nil:
+           dict = Hash.new
+         end
+         cur_time = Time.new
+         dict[cur_time.hour] = session[params[:From]]["response"]
+
       elsif response == 'no'
         message = "Please resend your response to the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
         session["counter"] -= 2
