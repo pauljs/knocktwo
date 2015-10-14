@@ -30,7 +30,7 @@ get '/sms-quickstart' do
   SECOND_RESPONSE = 2
   if response == "get stuff"
      session[params[:From]]["counter"] -= 1
-    message = "test"
+    message = session[params[:From]].to_s
   elsif sms_count == START
     message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
   elsif sms_count == FIRST_RESPONSE
@@ -47,9 +47,9 @@ get '/sms-quickstart' do
       response = response.downcase
       if response == 'yes'
         if session[params[:From]]["response"].to_i >= 7
-          suggestion = "Glad to see you are sleeping enough!"
+          suggestion = " Glad to see you are getting enough sleep!"
         else
-          suggestion = "You should try to get more sleep."
+          suggestion = " You should try to get more sleep."
         end
         message = "Your response has been recorded." + suggestion + " If you would like to edit your response, respond with Edit. Thanks!"
          dict = session[params[:From]]
