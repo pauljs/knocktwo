@@ -46,7 +46,7 @@ get '/sms-quickstart' do
     message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
   elsif sms_count == FIRST_RESPONSE
     if all_digits? response
-      message = "I received your response as\n" + response + "\nPlease confirm if this is correct by answering Yes or No."
+      message = "I received your response as\n" + response + "\nPlease confirm if this is correct by answering Y or N for yes or no respectively."
       session[params[:From]]["response"] = response
     else
       message = "Sorry, your response was not in the correct format. I received:\n" + response + "\nbut expected a whole number. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
@@ -56,7 +56,7 @@ get '/sms-quickstart' do
   elsif sms_count == SECOND_RESPONSE
     if all_letters? response
       response = response.downcase
-      if response == 'yes'
+      if response == 'y'
         if session[params[:From]]["response"].to_i >= 7
           suggestion = " Glad to see you are getting enough sleep!"
         else
@@ -68,22 +68,45 @@ get '/sms-quickstart' do
            dict = Hash.new
          end
          cur_time = Time.new
-         dict[cur_time.day] = session[params[:From]]["response"]
+         dict[cur_time.day] = Hash.new
+         dict[cur_time.day]["time"] = cur_time
+         dict[cur_time.day]["response"] = session[params[:From]]["response"]
 
       elsif response == 'no'
         message = "Please resend your response to the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
         session[params[:From]]["counter"] -= 2
       else
-        message = "Sorry, your response was not in the correct format. I received:\n" + response + "\nbut expected Yes or No. Please state Yes or No."
+        message = "Sorry, your response was not in the correct format. I received:\n" + response + "\nbut expected Y or N. Please state Y or N for yes or no respectively."
         session[params[:From]]["counter"] -= 1
       end
     else
-      message = "Sorry, your response was not in the correct format. I received:\n" + response + "\nbut expected Yes or No. Please state Yes or No."
+      message = "Sorry, your response was not in the correct format. I received:\n" + response + "\nbut expected Y or N. Please state Y or N for yes or no respectively."
         session[params[:From]]["counter"] -= 1
     end
-  elsif sms_count > SECOND_RESPONSE && response.downcase == "edit"
+  elsif sms_count > SECOND_RESPONSE && all_letters?(response) && response.downcase == "edit"
     message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
-    session[params[:From]]["counter"] = 0
+    session[params[:From]]["counter"] = 0 
+  elsif sms_count > SECOND_RESPONSE && all_letters?(response) && response.downcase == "stats"
+    temp = session[:From]
+    months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    message = "Statistics:\n"
+    counter = 0
+    temp.each do |key, value|
+      if key != "counter"
+        time = temp[key]["time"]
+        message +=  months[time.day]+ ": " + temp[key]["response"] + "\n"
+        sum += temp[key]["response"]
+        counter += 1
+      end
+      if counter != 0
+        message += "Avg Hours of Sleep: " + (sum / counter) + "\n"
+        if (sum / counter) >= 7
+          message += "Glad to see you are getting enough sleep!"
+        else
+          message += "You should try to get more sleep."
+        end
+      end
+    end
   else
     message = "You have completed this task. If you would like to edit your response, respond with Edit; otherwise, I'll let you know when you have another task!"
   end
