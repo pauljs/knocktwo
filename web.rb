@@ -70,7 +70,7 @@ get '/sms-quickstart' do
          cur_time = Time.new
          dict[cur_time.day] = Hash.new
          dict[cur_time.day]["time"] = cur_time
-         dict[cur_time.day]["response"] = session[params[:From]]["response"]
+         dict[cur_time.day]["response"] = session[params[:From]]["response"].to_i
 
       elsif response == 'no'
         message = "Please resend your response to the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
