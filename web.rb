@@ -87,7 +87,7 @@ get '/sms-quickstart' do
     message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
     session[params[:From]]["counter"] = 0 
   elsif sms_count > SECOND_RESPONSE && all_letters?(response) && response.downcase == "stats"
-    temp = session[:From]
+    temp = session[params[:From]]
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     message = "Statistics:\n"
     counter = 0
@@ -108,7 +108,7 @@ get '/sms-quickstart' do
       end
     end
   else
-    message = "You have completed this task. If you would like to edit your response, respond with Edit; otherwise, I'll let you know when you have another task!"
+    message = "You have completed this task. If you would like to edit your response, respond with Edit. If you would like to see your results, respond with Stats. Otherwise, I'll let you know when you have another task!"
   end
   twiml = Twilio::TwiML::Response.new do |r|
     r.Message message
