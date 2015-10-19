@@ -90,17 +90,17 @@ get '/sms-quickstart' do
     temp = session[params[:From]]
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     message = "Statistics:\n"
-    counter = 0
+    num = 0
     temp.each do |key, value|
       if key != "counter"
         time = temp[key]["time"]
-        message +=  months[time.day]+ ": " + temp[key]["response"] + "\n"
+        message +=  months[time.day] + ": " + temp[key]["response"] + "\n"
         sum += temp[key]["response"]
-        counter += 1
+        num += 1
       end
-      if counter != 0
-        message += "Avg Hours of Sleep: " + (sum / counter) + "\n"
-        if (sum / counter) >= 7
+      if num != 0
+        message += "Avg Hours of Sleep: " + (sum / num) + "\n"
+        if (sum / num) >= 7
           message += "Glad to see you are getting enough sleep!"
         else
           message += "You should try to get more sleep."
