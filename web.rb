@@ -28,6 +28,17 @@ get '/sms-quickstart' do
   START = 0
   FIRST_RESPONSE = 1
   SECOND_RESPONSE = 2
+  if response == "send restart all"
+    session.each do |key, value|
+      session[key]["counter"] = 0
+      message = "Hello! This is Knock, your personal health tracker assistant from your doctor. Please answer the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
+      twiml = Twilio::TwiML::Response.new do |r|
+	    r.Message message
+	 end
+      twiml.text
+    end
+
+  else
   if response == "get stuff"
      session[params[:From]]["counter"] -= 1
     message = session[params[:From]].to_s
@@ -57,7 +68,7 @@ get '/sms-quickstart' do
            dict = Hash.new
          end
          cur_time = Time.new
-         dict[cur_time.hour] = session[params[:From]]["response"]
+         dict[cur_time.day] = session[params[:From]]["response"]
 
       elsif response == 'no'
         message = "Please resend your response to the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
@@ -81,4 +92,5 @@ get '/sms-quickstart' do
   end
   session[params[:From]]["counter"] += 1
   twiml.text
+  end
 end
