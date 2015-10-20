@@ -94,7 +94,7 @@ get '/sms-quickstart' do
     sum = 0
     temp.each do |key, value|
       if key != "counter" && key != "response"
-        time = temp[key].to_s
+        time = temp.to_s
         message = time
     #    message +=  months[time.day] + ": " + temp[key]["response"].to_s + "\n"
     #    sum += temp[key]["response"]
