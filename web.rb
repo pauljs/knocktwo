@@ -97,7 +97,7 @@ get '/sms-quickstart' do
         new_map = temp[key]
         time = new_map["time"]
         answer = new_map["response"]
-        message += time.to_s + answer.to_s
+        message += time.day.to_s + answer.to_s
         #message +=  months[time.day] + ": " + answer.to_s + "\n"
     #    sum += temp[key]["response"]
     #    num += 1
