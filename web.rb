@@ -96,8 +96,8 @@ get '/sms-quickstart' do
       if key != "counter" && key != "response"
         new_map = temp[key]
         time = new_map["time"]
-        answer = new_map["response"]
-        message +=  months[time.day] + ": " + answer.to_s + "\n"
+        #answer = new_map["response"]
+        #message +=  months[time.day] + ": " + answer.to_s + "\n"
     #    sum += temp[key]["response"]
     #    num += 1
       end
