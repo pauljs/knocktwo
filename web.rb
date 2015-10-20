@@ -19,6 +19,7 @@ end
 
 get '/sms-quickstart' do
   response = params[:Body]
+  session = Hash.new
   #session["counter"] = -1
   session[params[:From]] ||= Hash.new
   session[params[:From]]["counter"] ||= 0
