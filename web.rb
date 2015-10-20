@@ -91,6 +91,7 @@ get '/sms-quickstart' do
     months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     message = "Statistics:\n"
     num = 0
+    sum = 0
     temp.each do |key, value|
       if key != "counter"
         time = temp[key]["time"]
