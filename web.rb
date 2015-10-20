@@ -102,7 +102,7 @@ get '/sms-quickstart' do
         num += 1
       end
       if num != 0
-        message += "Avg Hours of Sleep: " + (sum / num) + "\n"
+        message += "Avg Hours of Sleep: " + (sum / num).to_s + "\n"
         if (sum / num) >= 7
           message += "Glad to see you are getting enough sleep!"
         else
