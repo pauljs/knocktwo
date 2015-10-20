@@ -99,7 +99,7 @@ get '/sms-quickstart' do
     #    message +=  months[time.day] + ": " + temp[key]["response"].to_s + "\n"
     #    sum += temp[key]["response"]
     #    num += 1
-    #  end
+      end
      # if num != 0
      #   message += "Avg Hours of Sleep: " + (sum / num) + "\n"
      #   if (sum / num) >= 7
