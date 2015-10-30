@@ -98,7 +98,9 @@ get '/sms-quickstart' do
       if key != "counter" && key != "response"
         time_day_arrays = temp[key]
         time_day_array = time_day_arrays.last
-        message +=  months[time.month] + " #{time_day_array[0].day}: " + time_day_array[1].to_s + "\n"
+        day = time_day_array[0]
+        answer = time_day_array[1]
+        message +=  months[time.month] + " #{day}: " + answer.to_s + "\n"
         sum += answer
         num += 1
       end
