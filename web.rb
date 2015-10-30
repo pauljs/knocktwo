@@ -71,7 +71,7 @@ get '/sms-quickstart' do
          if dict[cur_time.day] == nil
            dict[cur_time.day] = []
          end
-         array= dict[cur_time.day]
+         array = dict[cur_time.day]
          array.push([cur_time, session[params[:From]]["response"].to_i])
 
       elsif response == 'no'
@@ -98,9 +98,10 @@ get '/sms-quickstart' do
       if key != "counter" && key != "response"
         time_day_arrays = temp[key]
         time_day_array = time_day_arrays.last
-        day = time_day_array[0]
+        month = time_day_array[0].month
+        day = time_day_array[0].day
         answer = time_day_array[1]
-        #message +=  months[time.month] + " #{day}: " + answer.to_s + "\n"
+        message +=  months[month] + " #{day}: " + answer.to_s + "\n"
         sum += answer
         num += 1
       end
