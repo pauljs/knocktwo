@@ -100,7 +100,7 @@ get '/sms-quickstart' do
         time_day_array = time_day_arrays.last
         day = time_day_array[0]
         answer = time_day_array[1]
-        message +=  months[time.month] + " #{day}: " + answer.to_s + "\n"
+        #message +=  months[time.month] + " #{day}: " + answer.to_s + "\n"
         sum += answer
         num += 1
       end
