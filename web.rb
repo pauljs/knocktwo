@@ -68,9 +68,11 @@ get '/sms-quickstart' do
            dict = Hash.new
          end
          cur_time = Time.new
-         dict[cur_time.day] = Hash.new
-         dict[cur_time.day]["time"] = cur_time
-         dict[cur_time.day]["response"] = session[params[:From]]["response"].to_i
+         if dict[cur_time.day] == nil
+           dict[cur_time.day] = []
+         end
+         array= dict[cur_time.day]
+         array.push([cur_time, session[params[:From]]["response"].to_i])
 
       elsif response == 'no'
         message = "Please resend your response to the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
@@ -94,10 +96,9 @@ get '/sms-quickstart' do
     sum = 0
     temp.each do |key, value|
       if key != "counter" && key != "response"
-        new_map = temp[key]
-        time = new_map["time"]
-        answer = new_map["response"]
-        message +=  months[time.month] + " #{time.day}: " + answer.to_s + "\n"
+        time_day_arrays = temp[key]
+        time_day_array = time_day_arrays.last
+        message +=  months[time.month] + " #{time_day_array[0].day}: " + time_day_array[1].to_s + "\n"
         sum += answer
         num += 1
       end
