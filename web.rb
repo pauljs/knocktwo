@@ -74,7 +74,7 @@ get '/sms-quickstart' do
          array = dict[cur_time.day]
          array.push([cur_time, session[params[:From]]["response"].to_i])
 
-      elsif response == 'no'
+      elsif response == 'n'
         message = "Please resend your response to the following question in whole numbers.\nHow many total hours of sleep did you get last night? (e.g. 8)"
         session[params[:From]]["counter"] -= 2
       else
